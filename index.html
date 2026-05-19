@@ -38,33 +38,78 @@
         .file-item a { color: var(--text); text-decoration: none; font-size: 14px; flex: 1;}
         .action-btns button { width: auto; padding: 6px 12px; margin: 0 0 0 5px; font-size: 12px; }
    
-        /* --- OPTIMASI OTOMATIS KHUSUS LAYAR HP --- */
+        /* --- OPTIMASI ULTRA COMPACT & ELEGAN KHUSUS LAYAR HP --- */
 @media (max-width: 480px) {
-    /* 1. Mengecilkan Kotak & Tulisan Login */
-    .login-box { padding: 30px 20px; max-width: 310px; }
-    .login-box img { width: 70px; margin-bottom: 10px; }
-    .login-box h2, .login-box p { font-size: 19px; } /* Ukuran teks disesuaikan agar elegan */
-    .login-box p { margin: 5px 0 20px; }
-    input, button, select { padding: 10px 12px; font-size: 14px; margin-bottom: 10px; }
+    /* 1. HALAMAN LOGIN: dibuat mini, melayang anggun di tengah */
+    #login-page { padding: 10px; }
+    .login-box { 
+        width: 82%; 
+        max-width: 270px; /* Membatasi lebar kotak login agar tidak memenuhi layar */
+        padding: 25px 20px; 
+        border-radius: 16px; 
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .login-box img { 
+        width: 50px; /* Logo sekolah dibuat imut dan pas */
+        margin-bottom: 8px; 
+    }
+    .login-box h2, .login-box p { 
+        font-size: 15px !important; /* Ukuran teks sekecil aplikasi native, sangat elegan */
+        line-height: 1.3;
+    }
+    .login-box p { margin: 3px 0 15px; }
     
-    /* 2. Mengecilkan Dashboard & Menu Grid di HP */
-    #dashboard-page { padding: 15px; }
-    .header h2 { font-size: 20px; }
-    #user-info { font-size: 12px; }
-    .header button { padding: 6px 12px; font-size: 12px; }
+    /* Input & Tombol Login yang Tipis & Rapit */
+    input, button, select { 
+        padding: 8px 12px; 
+        font-size: 13px; 
+        margin-bottom: 8px; 
+        border-radius: 6px;
+    }
+    .footer { margin-top: 15px; font-size: 10px; opacity: 0.7; }
+
+    /* 2. DASHBOARD UTAMA: Padat & Presisi */
+    #dashboard-page { padding: 12px; }
+    .header { margin-bottom: 15px; padding-bottom: 10px; }
+    .header h2 { font-size: 16px; }
+    #user-info { font-size: 11px; }
+    .header button { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
     
-    /* Grid menu otomatis pas 2 kolom di HP, tidak kebesaran */
-    .grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-    .card { padding: 15px 10px; border-radius: 12px; }
-    .card i { font-size: 24px; margin-bottom: 6px; }
-    .card h3 { font-size: 12px; }
+    /* GRID MENU MINI (Pas 2 Kolom, Berjejer Manis) */
+    .grid { 
+        grid-template-columns: repeat(2, 1fr); /* Membagi 2 kolom sama rata secara rigid */
+        gap: 10px; 
+    }
+    .card { 
+        padding: 12px 8px; 
+        border-radius: 10px; 
+        min-height: 75px; /* Membatasi tinggi kotak agar tidak lonjong ke bawah */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .card i { 
+        font-size: 20px; /* Ukuran ikon diperkecil agar pas */
+        margin-bottom: 5px; 
+    }
+    .card h3 { 
+        font-size: 11px; /* Teks menu kecil, rapi, tidak makan tempat */
+        font-weight: 500;
+        line-height: 1.2;
+    }
     
-    /* 3. Mengecilkan Modal Pop-up di HP */
-    .modal { padding: 10px; }
-    .modal-content { padding: 15px; }
-    .modal-content h2 { font-size: 18px; }
-    .file-item { padding: 8px; font-size: 13px; }
-    .file-item a { font-size: 13px; }
+    /* 3. MODAL / POP-UP FORM & UPLOAD */
+    .modal { padding: 8px; }
+    .modal-content { padding: 12px; border-radius: 12px; }
+    .modal-content h2 { font-size: 15px; }
+    .modal-content h4 { font-size: 12px; margin: 10px 0 5px; }
+    #search-bar { padding: 8px; font-size: 12px; margin-bottom: 10px; }
+    
+    /* Daftar File di Dalam Brankas */
+    .file-item { padding: 6px 8px; margin-bottom: 5px; }
+    .file-item a { font-size: 12px; }
+    .action-btns button { padding: 4px 8px; font-size: 10px; }
 }
     </style>
 </head>

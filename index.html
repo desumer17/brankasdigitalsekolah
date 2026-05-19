@@ -102,23 +102,83 @@
     .view-switcher { margin-bottom: 10px; }
     .view-btn { padding: 5px 10px; font-size: 11px; }
 
-    /* HP - 1. TAMPILAN GRID MINI */
-    .grid.view-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .grid.view-grid .card { height: 85px; padding: 10px 6px; }
-    .grid.view-grid .card i { font-size: 20px; margin-bottom: 4px; }
-    .grid.view-grid .card h3 { font-size: 11px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    /* =======================================================
+       HP - 1. TAMPILAN GRID (3 KOLOM BERJEJER - SUPER RINGKAS)
+       ======================================================= */
+    .grid.view-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 8px; 
+    }
+    .grid.view-grid .card { 
+        height: 80px; 
+        padding: 8px 4px; 
+    }
+    .grid.view-grid .card i { 
+        font-size: 18px; 
+        margin-bottom: 3px; 
+    }
+    .grid.view-grid .card h3 { 
+        font-size: 10px; 
+        display: -webkit-box; 
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical; 
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    }
 
-    /* HP - 2. TAMPILAN LARGE / BESAR */
-    .grid.view-large { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .grid.view-large .card { height: 115px; padding: 12px 8px; }
-    .grid.view-large .card i { font-size: 28px; margin-bottom: 6px; }
-    .grid.view-large .card h3 { font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    /* =======================================================
+       HP - 2. TAMPILAN LARGE / BESAR (2 KOLOM BERJEJER - LEGA)
+       ======================================================= */
+    .grid.view-large { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+    }
+    .grid.view-large .card { 
+        height: 110px; 
+        padding: 12px 8px; 
+    }
+    .grid.view-large .card i { 
+        font-size: 28px; 
+        margin-bottom: 6px; 
+    }
+    .grid.view-large .card h3 { 
+        font-size: 12px; 
+        font-weight: bold;
+        display: -webkit-box; 
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical; 
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    }
 
-    /* HP - 3. TAMPILAN LIST (SANGAT MANIS & ELEGAN!) */
-    .grid.view-list { grid-template-columns: 1fr; gap: 6px; }
-    .grid.view-list .card { height: 48px; padding: 0 15px; }
-    .grid.view-list .card i { font-size: 18px; margin-right: 12px; }
-    .grid.view-list .card h3 { font-size: 12px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    /* =======================================================
+       HP - 3. TAMPILAN LIST (1 KOLOM KE BAWAH DENGAN DETAIL)
+       ======================================================= */
+    .grid.view-list { 
+        grid-template-columns: 1fr; 
+        gap: 6px; 
+    }
+    .grid.view-list .card { 
+        height: 50px; 
+        padding: 0 15px; 
+        flex-direction: row; 
+        justify-content: flex-start; 
+        text-align: left;
+    }
+    .grid.view-list .card i { 
+        font-size: 18px; 
+        margin-bottom: 0; 
+        margin-right: 12px; 
+    }
+    .grid.view-list .card h3 { 
+        font-size: 12px; 
+        text-align: left;
+        display: -webkit-box; 
+        -webkit-line-clamp: 1; 
+        vertical-align: middle;
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    }
     
     /* 3. MODAL / POP-UP FORM & UPLOAD */
     .modal { padding: 8px; }

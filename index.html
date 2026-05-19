@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brankas Digital - SDN 17 Dauh Puri</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg: #0d1117; --card: #161b22; --primary: #00a884; --text: #fff; --sub: #8b949e; --border: #30363d; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+        .hidden { display: none !important; }
+        input, button, select { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; }
+        button:hover { opacity: 0.8; }
+        
+        /* LOGIN */
+        #login-page { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .login-box { background: var(--card); padding: 40px 30px; border-radius: 20px; text-align: center; width: 100%; max-width: 350px; border: 1px solid var(--border); }
+        .login-box img { width: 80px; margin-bottom: 10px; }
+        .login-box h2 { margin: 0; color: var(--primary); }
+        .login-box p { margin: 5px 0 25px; color: var(--sub); font-size: 14px; }
+        .footer { margin-top: 30px; color: var(--sub); font-size: 12px; }
+
+        /* DASHBOARD */
+        #dashboard-page { padding: 20px; max-width: 1000px; margin: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .card i { font-size: 30px; color: var(--primary); margin-bottom: 10px; }
+        .card h3 { font-size: 14px; margin: 0; }
+        
+        /* FOLDER VIEW & MODALS */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: var(--card); padding: 20px; border-radius: 15px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); }
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg); margin-bottom: 8px; border-radius: 8px; }
+        .file-item a { color: var(--text); text-decoration: none; font-size: 14px; flex: 1;}
+        .action-btns button { width: auto; padding: 6px 12px; margin: 0 0 0 5px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <div class="login-box">
+            <img src="https://cdn-icons-png.flaticon.com/512/10014/10014115.png" alt="Logo">
+            <h2>Brankas Digital</h2>
+            <p>SD Negeri 17 Dauh Puri</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Masuk</button>
+        </div>
+        <div class="footer">Copyright 2026 3D Creative</div>
+    </div>
+
+    <div id="dashboard-page" class="hidden">
+        <div class="header">
+            <div>
+                <h2 style="margin:0; color:var(--primary);">Dashboard</h2>
+                <span id="user-info" style="color:var(--sub); font-size:14px;"></span>
+            </div>
+            <div>
+                <button id="btn-admin" class="hidden" onclick="openAdminModal()" style="width:auto; margin-right:10px;">+ Tambah Brankas</button>
+                <button onclick="location.reload()" style="width:auto; background:#d73a49; color:#fff;">Keluar</button>
+            </div>
+        </div>
+        <div class="grid" id="menu-grid"></div>
+    </div>
+
+    <div id="folder-modal" class="modal hidden">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between;">
+                <h2 id="folder-title" style="margin-top:0;">Nama Brankas</h2>
+                <i class="fas fa-times" style="cursor:pointer; font-size:20px;" onclick="closeModal('folder-modal')"></i>
+            </div>
+            
+            <div style="background:var(--bg); padding:15px; border-radius:10px; margin-bottom:20px;">
+                <h4 style="margin-top:0;">Upload Berkas</h4>
+                <input type="text" id="up-nama" placeholder="Nama Berkas (Cth: Laporan Nilai)">
+                <input type="date" id="up-tanggal">
+                <input type="file" id="up-files" multiple>
+                <button onclick="uploadFiles()">Upload Sekarang</button>
+                <div id="upload-status" style="font-size:12px; color:var(--primary);"></div>
+            </div>
+
+            <input type="text" id="search-bar" placeholder="Cari berkas..." onkeyup="filterFiles()">
+            <div id="file-list">Mencari berkas...</div>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Tambah Brankas / Ikon Baru</h2>
+            <input type="text" id="new-nama" placeholder="Nama Brankas (Cth: Prestasi Siswa)">
+            <input type="text" id="new-icon" placeholder="Kode Ikon FontAwesome (Cth: fa-trophy)">
+            <select id="new-tipe">
+                <option value="folder">Folder Google Drive</option>
+                <option value="link">Link Web Aplikasi Lain</option>
+            </select>
+            <input type="text" id="new-target" placeholder="ID Folder Drive / Tautan URL">
+            <button onclick="simpanBrankasBaru()">Simpan Brankas</button>
+            <button style="background:transparent; border:1px solid var(--border); color:var(--text);" onclick="closeModal('admin-modal')">Batal</button>
+        </div>
+    </div>
+
+    <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwF_oVdNGmEcHqmj2wgSGFDdewAWdqkvFgYtVw9QxKpo5oW8azROlYM73b4hopW0XMfJg/exec";
+        
+        let currentUser = {};
+        let currentFolderId = "";
+        let currentFolderName = "";
+        let filesData = [];
+
+        async function fetchAPI(action, payload = {}) {
+            payload.action = action;
+            let res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify(payload) });
+            return await res.json();
+        }
+
+        // --- LOGIN & RENDER MENU ---
+        async function login() {
+            let u = document.getElementById('username').value;
+            let p = document.getElementById('password').value;
+            if(!u || !p) return alert("Isi form!");
+            
+            let btn = event.target; btn.innerText = "Memproses...";
+            let res = await fetchAPI("login", { username: u, password: p });
+            
+            if(res.status === "SUCCESS") {
+                currentUser = res.data.user;
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('dashboard-page').classList.remove('hidden');
+                document.getElementById('user-info').innerText = `${currentUser.nama} (${currentUser.peran})`;
+                
+                if(currentUser.peran === "SuperAdmin") document.getElementById('btn-admin').classList.remove('hidden');
+
+                // Render Brankas
+                let grid = document.getElementById('menu-grid');
+                grid.innerHTML = "";
+                
+                // Tambahkan Brankas Pribadi jika punya ID
+                if(currentUser.personalFolder) {
+                    res.data.brankas.unshift({nama: "Brankas Pribadi", icon: "fa-user-lock", tipe: "folder", target: currentUser.personalFolder});
+                }
+
+                res.data.brankas.forEach(b => {
+                    grid.innerHTML += `
+                        <div class="card" onclick="openBrankas('${b.tipe}', '${b.target}', '${b.nama}')">
+                            <i class="fas ${b.icon}"></i>
+                            <h3>${b.nama}</h3>
+                        </div>`;
+                });
+            } else { alert(res.message); btn.innerText = "Masuk"; }
+        }
+
+        // --- BUKA MENU BRANKAS ---
+        async function openBrankas(tipe, target, nama) {
+            if(tipe === "link") return window.open(target, '_blank');
+            
+            currentFolderId = target;
+            currentFolderName = nama;
+            document.getElementById('folder-title').innerText = nama;
+            document.getElementById('folder-modal').classList.remove('hidden');
+            document.getElementById('file-list').innerHTML = "Memuat file...";
+            
+            let res = await fetchAPI("getFiles", { folderId: target });
+            if(res.status === "SUCCESS") {
+                filesData = res.data;
+                renderFiles(filesData);
+            }
+        }
+
+        function renderFiles(list) {
+            let html = "";
+            list.forEach(f => {
+                html += `
+                <div class="file-item">
+                    <a href="${f.url}" target="_blank"><i class="fas fa-file"></i> ${f.nama}</a>
+                    <div class="action-btns">
+                        <button onclick="downloadFile('${f.id}', '${f.nama}')" style="background:#2ea043; color:white;"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('file-list').innerHTML = html || "Tidak ada berkas.";
+        }
+
+        function filterFiles() {
+            let q = document.getElementById('search-bar').value.toLowerCase();
+            let filtered = filesData.filter(f => f.nama.toLowerCase().includes(q));
+            renderFiles(filtered);
+        }
+
+        // --- UPLOAD MULTIPLE & AUTO RENAME & KOMPRES ---
+        async function uploadFiles() {
+            let files = document.getElementById('up-files').files;
+            let nama = document.getElementById('up-nama').value;
+            let tgl = document.getElementById('up-tanggal').value;
+            
+            if(files.length === 0) return alert("Pilih berkas!");
+            let statusEl = document.getElementById('upload-status');
+            
+            for(let i=0; i<files.length; i++) {
+                let file = files[i];
+                let ext = file.name.split('.').pop();
+                let formatNama = nama ? `${currentFolderName}_${nama}_${tgl}.${ext}` : file.name;
+                statusEl.innerText = `Mengunggah berkas ${i+1} dari ${files.length}...`;
+
+                let base64 = await processFile(file);
+                await fetchAPI("upload", {
+                    folderId: currentFolderId,
+                    fileName: formatNama,
+                    mimeType: file.type || 'application/octet-stream',
+                    base64: base64
+                });
+            }
+            statusEl.innerText = "Semua unggahan berhasil!";
+            openBrankas('folder', currentFolderId, currentFolderName); // Refresh
+        }
+
+        function processFile(file) {
+            return new Promise((resolve) => {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    if(file.type.startsWith('image/')) {
+                        let img = new Image();
+                        img.src = e.target.result;
+                        img.onload = () => {
+                            let canvas = document.createElement('canvas');
+                            let ctx = canvas.getContext('2d');
+                            let MAX_W = 1200, MAX_H = 1200;
+                            let w = img.width, h = img.height;
+                            if (w > h && w > MAX_W) { h *= MAX_W/w; w = MAX_W; }
+                            else if (h > MAX_H) { w *= MAX_H/h; h = MAX_H; }
+                            canvas.width = w; canvas.height = h;
+                            ctx.drawImage(img, 0, 0, w, h);
+                            let compressed = canvas.toDataURL('image/jpeg', 0.75);
+                            resolve(compressed.split(',')[1]);
+                        }
+                    } else {
+                        resolve(e.target.result.split(',')[1]);
+                    }
+                }
+            });
+        }
+
+        // --- DOWNLOAD FILE BYPASS LOGIN ---
+        async function downloadFile(id, nama) {
+            let res = await fetchAPI("download", { fileId: id });
+            if(res.status === "SUCCESS") {
+                let a = document.createElement('a');
+                a.href = "data:" + res.data.mimeType + ";base64," + res.data.base64;
+                a.download = res.data.nama;
+                a.click();
+            } else { alert("Gagal unduh file."); }
+        }
+
+        // --- ADMIN MENU ---
+        function openAdminModal() { document.getElementById('admin-modal').classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        
+        async function simpanBrankasBaru() {
+            let data = {
+                nama: document.getElementById('new-nama').value,
+                icon: document.getElementById('new-icon').value,
+                tipe: document.getElementById('new-tipe').value,
+                target: document.getElementById('new-target').value
+            };
+            let res = await fetchAPI("addBrankas", data);
+            alert(res.message);
+            location.reload();
+        }
+
+        // PWA INIT
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "short_name": "Brankas",
+  "name": "Brankas Digital SDN 17 Dauh Puri",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/10014/10014115.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#0d1117",
+  "display": "standalone",
+  "theme_color": "#00a884",
+  "orientation": "portrait"
+}

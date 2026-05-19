@@ -378,6 +378,12 @@
                 });
             }
             statusEl.innerText = "Semua unggahan berhasil!";
+            // --- Letakkan di dalam fungsi upload setelah pesan sukses muncul ---
+document.getElementById('nama-berkas-input-id').value = ''; // Ganti dengan ID input nama berkas Anda
+document.getElementById('file-input-id').value = '';       // Ganti dengan ID input pilih file Anda
+
+// Opsional: Jika menggunakan tag <form>, cukup panggil fungsi reset form:
+// document.getElementById('id-form-upload-kamu').reset();
             openBrankas('folder', currentFolderId, currentFolderName); // Refresh
         }
 

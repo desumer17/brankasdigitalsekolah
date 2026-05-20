@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brankas Digital - SDN 17 Dauh Puri</title>
+    
     <link rel="icon" type="image/png" href="logo-sekolah.png">
+    <link rel="apple-touch-icon" href="logo-sekolah.png">
     <link rel="manifest" href="manifest.json">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --bg: #0d1117; --card: #161b22; --primary: #00a884; --text: #fff; --sub: #8b949e; --border: #30363d; }
@@ -480,7 +483,15 @@
 
         const savedView = localStorage.getItem('brankas_view_pref') || 'grid';
         changeView(savedView);
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+        
+        // Registrasi Service Worker Standar PWA Teroptimal
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('✓ PWA Service Worker sukses terdaftar!', reg.scope))
+                    .catch(err => console.error('× Gagal mendaftarkan Service Worker PWA:', err));
+            });
+        }
     </script>
 </body>
 </html>

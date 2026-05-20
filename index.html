@@ -11,10 +11,10 @@
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         .hidden { display: none !important; }
         input, button, select { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; }
+        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; }
         button:hover { opacity: 0.8; }
+        button:disabled { background: var(--sub); cursor: not-allowed; }
         
-        /* LOGIN */
         #login-page { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .login-box { background: var(--card); padding: 40px 30px; border-radius: 20px; text-align: center; width: 100%; max-width: 350px; border: 1px solid var(--border); }
         .login-box img { width: 80px; margin-bottom: 10px; }
@@ -22,7 +22,6 @@
         .login-box p { margin: 5px 0 25px; color: var(--sub); font-size: 14px; }
         .footer { margin-top: 30px; color: var(--sub); font-size: 12px; }
 
-        /* DASHBOARD */
         #dashboard-page { padding: 20px; max-width: 1000px; margin: auto; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
@@ -31,179 +30,68 @@
         .card i { font-size: 30px; color: var(--primary); margin-bottom: 10px; }
         .card h3 { font-size: 14px; margin: 0; }
         
-        /* FOLDER VIEW & MODALS */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: var(--card); padding: 20px; border-radius: 15px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); }
-        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg); margin-bottom: 8px; border-radius: 8px; }
-        .file-item a { color: var(--text); text-decoration: none; font-size: 14px; flex: 1;}
+        .modal-content { background: var(--card); padding: 20px; border-radius: 15px; width: 100%; max-width: 650px; max-height: 92vh; overflow-y: auto; border: 1px solid var(--border); }
+        
+        .modal-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 15px; gap: 5px; }
+        .tab-link { flex: 1; padding: 12px; text-align: center; background: none; border: none; color: var(--sub); font-size: 14px; font-weight: bold; cursor: pointer; border-radius: 8px 8px 0 0; transition: 0.2s; margin-bottom: 0; }
+        .tab-link:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+        .tab-link.active-tab { border-bottom: 3px solid var(--primary); color: var(--primary); background: rgba(0, 168, 132, 0.1); }
+
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--bg); margin-bottom: 8px; border-radius: 8px; border: 1px solid var(--border); }
+        .file-item a { color: var(--text); text-decoration: none; font-size: 14px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; }
         .action-btns button { width: auto; padding: 6px 12px; margin: 0 0 0 5px; font-size: 12px; }
 
-/* --- DESAIN TOMBOL PENGUBAH TAMPILAN --- */
+        .subfolder-wrapper { margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
+        .subfolder-btn { width: auto; padding: 6px 14px; margin-bottom: 0; margin-right: 6px; background: #21262d; border: 1px solid var(--border); color: var(--sub); font-size: 12px; font-weight: 500; border-radius: 6px; transition: 0.2s; cursor: pointer; }
+        .subfolder-btn:hover { border-color: var(--primary); color: #fff; }
+        .subfolder-btn.active { background: var(--primary) !important; color: #000 !important; font-weight: bold; border-color: var(--primary) !important; }
+
         .view-switcher { display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 15px; }
         .view-btn { width: auto; padding: 6px 12px; margin-bottom: 0; background: var(--card); border: 1px solid var(--border); color: var(--sub); font-size: 12px; font-weight: 500; border-radius: 6px; transition: 0.2s; }
         .view-btn.active { background: var(--primary); color: #000; font-weight: bold; border-color: var(--primary); }
 
-        /* LOGIKAL LAYOUT 1: GRID VIEW (STANDAR DESKTOP) */
         .grid.view-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .grid.view-grid .card { height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .grid.view-grid .card i { font-size: 26px; margin-bottom: 8px; }
         .grid.view-grid .card h3 { font-size: 13px; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
 
-        /* LOGIKAL LAYOUT 2: LARGE VIEW (BESAR DESKTOP) */
         .grid.view-large { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
         .grid.view-large .card { height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
         .grid.view-large .card i { font-size: 40px; margin-bottom: 12px; }
         .grid.view-large .card h3 { font-size: 15px; text-align: center; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
 
-        /* LOGIKAL LAYOUT 3: LIST VIEW (BARIS DESKTOP - COCOK UNTUK TEKS PANJANG) */
         .grid.view-list { grid-template-columns: 1fr; gap: 8px; }
         .grid.view-list .card { height: 55px; display: flex; flex-direction: row; justify-content: flex-start; align-items: center; padding: 0 20px; text-align: left; }
         .grid.view-list .card i { font-size: 20px; margin-bottom: 0; margin-right: 15px; }
         .grid.view-list .card h3 { font-size: 14px; text-align: left; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
         
-        /* --- OPTIMASI ULTRA COMPACT & ELEGAN KHUSUS LAYAR HP --- */
-@media (max-width: 480px) {
-    /* 1. HALAMAN LOGIN: dibuat mini, melayang anggun di tengah */
-    #login-page { padding: 10px; }
-    .login-box { 
-        width: 82%; 
-        max-width: 270px; /* Membatasi lebar kotak login agar tidak memenuhi layar */
-        padding: 25px 20px; 
-        border-radius: 16px; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    }
-    .login-box img { 
-        width: 50px; /* Logo sekolah dibuat imut dan pas */
-        margin-bottom: 8px; 
-    }
-    .login-box h2, .login-box p { 
-        font-size: 15px !important; /* Ukuran teks sekecil aplikasi native, sangat elegan */
-        line-height: 1.3;
-    }
-    .login-box p { margin: 3px 0 15px; }
-    
-    /* Input & Tombol Login yang Tipis & Rapit */
-    input, button, select { 
-        padding: 8px 12px; 
-        font-size: 13px; 
-        margin-bottom: 8px; 
-        border-radius: 6px;
-    }
-    .footer { margin-top: 15px; font-size: 10px; opacity: 0.7; }
-
-    /* 2. DASHBOARD UTAMA: Padat & Presisi */
-    #dashboard-page { padding: 12px; }
-    .header { margin-bottom: 15px; padding-bottom: 10px; }
-    .header h2 { font-size: 16px; }
-    #user-info { font-size: 11px; }
-    .header button { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
-    
-    /* RESPONSIVE SWITCHER DI HP */
-    .view-switcher { margin-bottom: 10px; }
-    .view-btn { padding: 5px 10px; font-size: 11px; }
-
-    /* =======================================================
-       HP - 1. TAMPILAN GRID (3 KOLOM BERJEJER - SUPER RINGKAS)
-       ======================================================= */
-    .grid.view-grid { 
-        grid-template-columns: repeat(3, 1fr); 
-        gap: 8px; 
-    }
-    .grid.view-grid .card { 
-        height: 80px; 
-        padding: 8px 4px; 
-    }
-    .grid.view-grid .card i { 
-        font-size: 18px; 
-        margin-bottom: 3px; 
-    }
-    .grid.view-grid .card h3 { 
-        font-size: 10px; 
-        display: -webkit-box; 
-        -webkit-line-clamp: 2; 
-        -webkit-box-orient: vertical; 
-        overflow: hidden; 
-        text-overflow: ellipsis;
-    }
-
-    /* =======================================================
-       HP - 2. TAMPILAN LARGE / BESAR (2 KOLOM BERJEJER - LEGA)
-       ======================================================= */
-    .grid.view-large { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 12px; 
-    }
-    .grid.view-large .card { 
-        height: 110px; 
-        padding: 12px 8px; 
-    }
-    .grid.view-large .card i { 
-        font-size: 28px; 
-        margin-bottom: 6px; 
-    }
-    .grid.view-large .card h3 { 
-        font-size: 12px; 
-        font-weight: bold;
-        display: -webkit-box; 
-        -webkit-line-clamp: 2; 
-        -webkit-box-orient: vertical; 
-        overflow: hidden; 
-        text-overflow: ellipsis;
-    }
-
-    /* =======================================================
-       HP - 3. TAMPILAN LIST (1 KOLOM KE BAWAH DENGAN DETAIL)
-       ======================================================= */
-    .grid.view-list { 
-        grid-template-columns: 1fr; 
-        gap: 6px; 
-    }
-    .grid.view-list .card { 
-        height: 50px; 
-        padding: 0 15px; 
-        flex-direction: row; 
-        justify-content: flex-start; 
-        text-align: left;
-    }
-    .grid.view-list .card i { 
-        font-size: 18px; 
-        margin-bottom: 0; 
-        margin-right: 12px; 
-    }
-    .grid.view-list .card h3 { 
-        font-size: 12px; 
-        text-align: left;
-        display: -webkit-box; 
-        -webkit-line-clamp: 1; 
-        vertical-align: middle;
-        overflow: hidden; 
-        text-overflow: ellipsis;
-    }
-    
-    /* 3. MODAL / POP-UP FORM & UPLOAD */
-    .modal { padding: 8px; }
-    .modal-content { padding: 12px; border-radius: 12px; }
-    .modal-content h2 { font-size: 15px; }
-    .modal-content h4 { font-size: 12px; margin: 10px 0 5px; }
-    #search-bar { padding: 8px; font-size: 12px; margin-bottom: 10px; }
-    
-    /* Daftar File di Dalam Brankas */
-    .file-item { padding: 6px 8px; margin-bottom: 5px; }
-    .file-item a { font-size: 12px; }
-    .action-btns button { padding: 4px 8px; font-size: 10px; }
-}
+        @media (max-width: 480px) {
+            #login-page { padding: 10px; }
+            .login-box { width: 85%; padding: 25px 20px; border-radius: 16px; }
+            input, button, select { padding: 10px; font-size: 13px; margin-bottom: 10px; }
+            .header h2 { font-size: 16px; }
+            #user-info { font-size: 11px; }
+            .grid.view-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .grid.view-grid .card { height: 85px; padding: 5px; }
+            .grid.view-grid .card i { font-size: 20px; }
+            .grid.view-grid .card h3 { font-size: 10px; }
+            .grid.view-large { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .modal-content { padding: 15px; border-radius: 12px; }
+            .tab-link { font-size: 12px; padding: 10px 5px; }
+        }
     </style>
 </head>
 <body>
 
     <div id="login-page">
         <div class="login-box">
-            <img src="logo-sekolah.png" alt="Logo Sekolah SDN 17 Dauh Puri">
+            <img src="logo-sekolah.png" alt="Logo Sekolah" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2201/2201557.png'">
             <h2>Brankas Digital</h2>
             <p>SD Negeri 17 Dauh Puri</p>
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Password">
-            <button onclick="login()">Masuk</button>
+            <button id="btn-login" onclick="login()">Masuk</button>
         </div>
         <div class="footer">Copyright 2026 3D Creative</div>
     </div>
@@ -215,7 +103,8 @@
                 <span id="user-info" style="color:var(--sub); font-size:14px;"></span>
             </div>
             <div>
-                <button id="btn-admin" class="hidden" onclick="openAdminModal()" style="width:auto; margin-right:10px;">+ Tambah Brankas</button>
+                <button id="btn-admin" class="hidden" onclick="openAdminModal()" style="width:auto; margin-right:5px;">+ Tambah Brankas</button>
+                <button id="btn-refresh-cache" class="hidden" onclick="bersihkanCacheServer()" style="width:auto; margin-right:5px; background:#ff9800; color:#000;"><i class="fas fa-sync-alt"></i> Refresh Data</button>
                 <button onclick="location.reload()" style="width:auto; background:#d73a49; color:#fff;">Keluar</button>
             </div>
         </div>
@@ -227,28 +116,41 @@
         </div>
 
         <div class="grid view-grid" id="menu-grid"></div>
-        
-        <div class="grid" id="menu-grid"></div>
     </div>
 
     <div id="folder-modal" class="modal hidden">
         <div class="modal-content">
-            <div style="display:flex; justify-content:space-between;">
-                <h2 id="folder-title" style="margin-top:0;">Nama Brankas</h2>
-                <i class="fas fa-times" style="cursor:pointer; font-size:20px;" onclick="closeModal('folder-modal')"></i>
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <h2 id="folder-title" style="margin:0; font-size:18px; color:var(--primary);">Nama Brankas</h2>
+                <i class="fas fa-times" style="cursor:pointer; font-size:22px; color:var(--sub);" onclick="closeModal('folder-modal')"></i>
             </div>
             
-            <div style="background:var(--bg); padding:15px; border-radius:10px; margin-bottom:20px;">
-                <h4 style="margin-top:0;">Upload Berkas</h4>
-                <input type="text" id="up-nama" placeholder="Nama Berkas (Cth: Laporan Nilai)">
-                <input type="date" id="up-tanggal">
-                <input type="file" id="up-files" multiple>
-                <button onclick="uploadFiles()">Upload Sekarang</button>
-                <div id="upload-status" style="font-size:12px; color:var(--primary);"></div>
+            <div id="subfolder-area" class="subfolder-wrapper hidden"></div>
+
+            <div class="modal-tabs">
+                <button id="tab-view" class="tab-link active-tab" onclick="switchModalTab('view')"><i class="fas fa-folder-open"></i> Lihat Berkas</button>
+                <button id="tab-upload" class="tab-link" onclick="switchModalTab('upload')"><i class="fas fa-cloud-upload-alt"></i> Upload Berkas</button>
             </div>
 
-            <input type="text" id="search-bar" placeholder="Cari berkas..." onkeyup="filterFiles()">
-            <div id="file-list">Mencari berkas...</div>
+            <div id="panel-view-files">
+                <input type="text" id="search-bar" placeholder="Cari nama dokumen..." onkeyup="filterFiles()" style="padding:10px; margin-bottom:12px;">
+                <div id="file-list">Menghubungkan ke server...</div>
+            </div>
+
+            <div id="panel-upload-files" class="hidden" style="background: rgba(0,0,0,0.2); padding:15px; border-radius:10px; border: 1px solid var(--border);">
+                <h4 style="margin-top:0; color:#fff;"><i class="fas fa-file-upload"></i> Unggah Dokumen Baru</h4>
+                <label style="font-size:12px; color:var(--sub);">Nama Label Berkas</label>
+                <input type="text" id="up-nama" placeholder="Contoh: RPP_Matematika_Smt1">
+                
+                <label style="font-size:12px; color:var(--sub);">Tanggal Dokumen</label>
+                <input type="date" id="up-tanggal">
+                
+                <label style="font-size:12px; color:var(--sub);">Pilih Berkas Komputer/HP</label>
+                <input type="file" id="up-files" multiple style="background:var(--card); padding:8px;">
+                
+                <button id="btn-upload" onclick="uploadFiles()" style="margin-top:5px;"><i class="fas fa-share-square"></i> Mulai Unggah Sekarang</button>
+                <div id="upload-status" style="font-size:13px; color:var(--primary); font-weight:bold; margin-top:10px; text-align:center;"></div>
+            </div>
         </div>
     </div>
 
@@ -270,9 +172,12 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbwF_oVdNGmEcHqmj2wgSGFDdewAWdqkvFgYtVw9QxKpo5oW8azROlYM73b4hopW0XMfJg/exec";
         
+        let CONFIG_SUBFOLDERS = {};
         let currentUser = {};
         let currentFolderId = "";
         let currentFolderName = "";
+        let mainFolderId = "";
+        let mainFolderName = "";
         let filesData = [];
 
         async function fetchAPI(action, payload = {}) {
@@ -281,28 +186,33 @@
             return await res.json();
         }
 
-        // --- LOGIN & RENDER MENU ---
         async function login() {
             let u = document.getElementById('username').value;
             let p = document.getElementById('password').value;
-            if(!u || !p) return alert("Isi form!");
+            if(!u || !p) return alert("Form Username & Password wajib diisi!");
             
-            let btn = event.target; btn.innerText = "Memproses...";
+            let btn = document.getElementById('btn-login'); 
+            btn.innerText = "Membuka Otoritas...";
+            btn.disabled = true;
+
             let res = await fetchAPI("login", { username: u, password: p });
             
             if(res.status === "SUCCESS") {
                 currentUser = res.data.user;
+                CONFIG_SUBFOLDERS = res.data.subfolders || {};
+
                 document.getElementById('login-page').classList.add('hidden');
                 document.getElementById('dashboard-page').classList.remove('hidden');
                 document.getElementById('user-info').innerText = `${currentUser.nama} (${currentUser.peran})`;
                 
-                if(currentUser.peran === "SuperAdmin") document.getElementById('btn-admin').classList.remove('hidden');
+                if(currentUser.peran === "SuperAdmin") {
+                    document.getElementById('btn-admin').classList.remove('hidden');
+                    document.getElementById('btn-refresh-cache').classList.remove('hidden');
+                }
 
-                // Render Brankas
                 let grid = document.getElementById('menu-grid');
                 grid.innerHTML = "";
                 
-                // Tambahkan Brankas Pribadi jika punya ID
                 if(currentUser.personalFolder) {
                     res.data.brankas.unshift({nama: "Brankas Pribadi", icon: "fa-user-lock", tipe: "folder", target: currentUser.personalFolder});
                 }
@@ -310,42 +220,151 @@
                 res.data.brankas.forEach(b => {
                     grid.innerHTML += `
                         <div class="card" onclick="openBrankas('${b.tipe}', '${b.target}', '${b.nama}')">
-                            <i class="fas ${b.icon}"></i>
+                            <i class="fas ${b.icon || 'fa-folder'}"></i>
                             <h3>${b.nama}</h3>
                         </div>`;
                 });
-            } else { alert(res.message); btn.innerText = "Masuk"; }
+            } else { 
+                alert(res.message); 
+                btn.innerText = "Masuk"; 
+                btn.disabled = false;
+            }
         }
 
-        // --- BUKA MENU BRANKAS ---
-        async function openBrankas(tipe, target, nama) {
-            if(tipe === "link") return window.open(target, '_blank');
+        async function bersihkanCacheServer() {
+            let btn = document.getElementById('btn-refresh-cache');
+            let originalText = btn.innerHTML;
+            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Menyinkronkan...";
+            btn.disabled = true;
             
-            currentFolderId = target;
-            currentFolderName = nama;
-            document.getElementById('folder-title').innerText = nama;
-            document.getElementById('folder-modal').classList.remove('hidden');
-            document.getElementById('file-list').innerHTML = "Memuat file...";
+            let res = await fetchAPI("clearCache", {});
+            if(res.status === "SUCCESS") {
+                alert("Data aplikasi berhasil disinkronkan dengan Google Sheet terbaru!");
+                location.reload();
+            } else {
+                alert("Gagal menyinkronkan: " + res.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function switchModalTab(tabType) {
+            document.querySelectorAll('.tab-link').forEach(el => el.classList.remove('active-tab'));
+            if(tabType === 'view') {
+                document.getElementById('tab-view').classList.add('active-tab');
+                document.getElementById('panel-view-files').classList.remove('hidden');
+                document.getElementById('panel-upload-files').classList.add('hidden');
+            } else {
+                document.getElementById('tab-upload').classList.add('active-tab');
+                document.getElementById('panel-view-files').classList.add('hidden');
+                document.getElementById('panel-upload-files').classList.remove('hidden');
+            }
+        }
+
+        function renderSubfolderNavigation() {
+            let area = document.getElementById('subfolder-area');
+            let listSubs = CONFIG_SUBFOLDERS[mainFolderName];
             
-            let res = await fetchAPI("getFiles", { folderId: target });
+            if(listSubs && listSubs.length > 0) {
+                area.classList.remove('hidden');
+                let htmlStr = `<span style="font-size:11px; color:var(--sub); display:block; margin-bottom:6px;"><i class="fas fa-sitemap"></i> Pilihan Sub-Folder:</span>`;
+                htmlStr += `<div style="display:flex; gap:6px; flex-wrap:wrap;">`;
+                
+                let activeMainClass = (currentFolderId === mainFolderId) ? "active" : "";
+                htmlStr += `<button class="subfolder-btn ${activeMainClass}" onclick="switchSubFolder('${mainFolderId}', '${mainFolderName}', this)">[ Utama ]</button>`;
+                
+                listSubs.forEach(sf => {
+                    let activeSubClass = (currentFolderId === sf.idDrive) ? "active" : "";
+                    htmlStr += `<button class="subfolder-btn ${activeSubClass}" onclick="switchSubFolder('${sf.idDrive}', '${sf.namaSub}', this)"><i class="fas fa-folder"></i> ${sf.namaSub}</button>`;
+                });
+                
+                htmlStr += `</div>`;
+                area.innerHTML = htmlStr;
+            } else {
+                area.innerHTML = "";
+                area.classList.add('hidden');
+            }
+        }
+
+        async function switchSubFolder(folderId, folderNama, btnElement) {
+            document.querySelectorAll('.subfolder-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            currentFolderId = folderId;
+            currentFolderName = folderNama;
+            
+            document.getElementById('file-list').innerHTML = "<i class='fas fa-spinner fa-spin'></i> Memuat berkas sub-folder...";
+            switchModalTab('view');
+            
+            let res = await fetchAPI("getFiles", { folderId: folderId });
             if(res.status === "SUCCESS") {
                 filesData = res.data;
                 renderFiles(filesData);
             }
         }
 
+        async function openBrankas(tipe, target, nama) {
+            if(tipe === "link") return window.open(target, '_blank');
+            
+            mainFolderId = target;
+            mainFolderName = nama;
+            currentFolderId = target;
+            currentFolderName = nama;
+            
+            document.getElementById('folder-title').innerText = nama;
+            document.getElementById('folder-modal').classList.remove('hidden');
+            
+            switchModalTab('view');
+            document.getElementById('file-list').innerHTML = "<i class='fas fa-circle-notch fa-spin'></i> Membuka Google Drive...";
+            
+            renderSubfolderNavigation();
+            
+            let res = await fetchAPI("getFiles", { folderId: target });
+            if(res.status === "SUCCESS") {
+                filesData = res.data;
+                renderFiles(filesData);
+            } else {
+                document.getElementById('file-list').innerHTML = "Gagal memuat berkas: " + res.message;
+            }
+        }
+
         function renderFiles(list) {
             let html = "";
-            list.forEach(f => {
+            let sorted = [...list].sort((a, b) => a.nama.localeCompare(b.nama, undefined, { sensitivity: 'base' }));
+            
+            sorted.forEach(f => {
+                let trashButton = "";
+                if (currentUser.peran === "SuperAdmin" || (currentUser.peran === "Guru" && mainFolderName === "Brankas Pribadi")) {
+                    trashButton = `
+                        <button onclick="deleteFile('${f.id}', '${f.nama}')" style="background:#d73a49; color:white; margin-left:5px;" title="Hapus Berkas">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>`;
+                }
+
                 html += `
                 <div class="file-item">
-                    <a href="${f.url}" target="_blank"><i class="fas fa-file"></i> ${f.nama}</a>
-                    <div class="action-btns">
-                        <button onclick="downloadFile('${f.id}', '${f.nama}')" style="background:#2ea043; color:white;"><i class="fas fa-download"></i></button>
+                    <a href="${f.url}" target="_blank" title="${f.nama}"><i class="fas fa-file-alt" style="color:var(--primary); margin-right:8px;"></i> ${f.nama}</a>
+                    <div class="action-btns" style="display:flex;">
+                        <button onclick="downloadFile('${f.id}', '${f.nama}')" style="background:#2ea043; color:white;" title="Download"><i class="fas fa-download"></i></button>
+                        ${trashButton}
                     </div>
                 </div>`;
             });
-            document.getElementById('file-list').innerHTML = html || "Tidak ada berkas.";
+            document.getElementById('file-list').innerHTML = html || "Tidak ada berkas di dalam direktori folder ini.";
+        }
+
+        async function deleteFile(id, nama) {
+            if(!confirm(`Apakah Anda yakin ingin menghapus file "${nama}" ke tempat sampah Google Drive?`)) return;
+            
+            document.getElementById('file-list').innerHTML = "Sedang menghapus berkas...";
+            let res = await fetchAPI("deleteFile", { fileId: id });
+            if(res.status === "SUCCESS") {
+                let resRefresh = await fetchAPI("getFiles", { folderId: currentFolderId });
+                if(resRefresh.status === "SUCCESS") {
+                    filesData = resRefresh.data;
+                    renderFiles(filesData);
+                }
+            } else { alert("Gagal menghapus: " + res.message); renderFiles(filesData); }
         }
 
         function filterFiles() {
@@ -354,37 +373,44 @@
             renderFiles(filtered);
         }
 
-        // --- UPLOAD MULTIPLE & AUTO RENAME & KOMPRES ---
         async function uploadFiles() {
             let files = document.getElementById('up-files').files;
-            let nama = document.getElementById('up-nama').value;
-            let tgl = document.getElementById('up-tanggal').value;
+            let namaInput = document.getElementById('up-nama').value;
+            let tglInput = document.getElementById('up-tanggal').value;
+            let btn = document.getElementById('btn-upload');
             
-            if(files.length === 0) return alert("Pilih berkas!");
+            if(files.length === 0) return alert("Harap tentukan file yang akan diupload!");
+            
+            btn.disabled = true;
             let statusEl = document.getElementById('upload-status');
             
-            for(let i=0; i<files.length; i++) {
+            for(let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split('.').pop();
-                let formatNama = nama ? `${currentFolderName}_${nama}_${tgl}.${ext}` : file.name;
-                statusEl.innerText = `Mengunggah berkas ${i+1} dari ${files.length}...`;
+                let formatNama = namaInput ? `${currentFolderName}_${namaInput}_${tglInput}.${ext}` : file.name;
+                statusEl.innerText = `Mengunggah berkas (${i+1}/${files.length}). Jangan tutup halaman...`;
 
-                let base64 = await processFile(file);
+                let base64Data = await processFile(file);
                 await fetchAPI("upload", {
                     folderId: currentFolderId,
                     fileName: formatNama,
                     mimeType: file.type || 'application/octet-stream',
-                    base64: base64
+                    base64: base64Data
                 });
             }
-            statusEl.innerText = "Semua unggahan berhasil!";
-            // --- Letakkan di dalam fungsi upload setelah pesan sukses muncul ---
-document.getElementById('nama-berkas-input-id').value = ''; // Ganti dengan ID input nama berkas Anda
-document.getElementById('file-input-id').value = '';       // Ganti dengan ID input pilih file Anda
-
-// Opsional: Jika menggunakan tag <form>, cukup panggil fungsi reset form:
-// document.getElementById('id-form-upload-kamu').reset();
-            openBrankas('folder', currentFolderId, currentFolderName); // Refresh
+            
+            statusEl.innerText = "✓ Berkas berhasil diunggah!";
+            document.getElementById('up-nama').value = '';
+            document.getElementById('up-files').value = '';
+            btn.disabled = false;
+            
+            setTimeout(async () => {
+                statusEl.innerText = "";
+                switchModalTab('view');
+                document.getElementById('file-list').innerHTML = "Memperbarui daftar berkas...";
+                let res = await fetchAPI("getFiles", { folderId: currentFolderId });
+                if(res.status === "SUCCESS") { filesData = res.data; renderFiles(filesData); }
+            }, 1200);
         }
 
         function processFile(file) {
@@ -407,14 +433,11 @@ document.getElementById('file-input-id').value = '';       // Ganti dengan ID in
                             let compressed = canvas.toDataURL('image/jpeg', 0.75);
                             resolve(compressed.split(',')[1]);
                         }
-                    } else {
-                        resolve(e.target.result.split(',')[1]);
-                    }
+                    } else { resolve(e.target.result.split(',')[1]); }
                 }
             });
         }
 
-        // --- DOWNLOAD FILE BYPASS LOGIN ---
         async function downloadFile(id, nama) {
             let res = await fetchAPI("download", { fileId: id });
             if(res.status === "SUCCESS") {
@@ -422,12 +445,14 @@ document.getElementById('file-input-id').value = '';       // Ganti dengan ID in
                 a.href = "data:" + res.data.mimeType + ";base64," + res.data.base64;
                 a.download = res.data.nama;
                 a.click();
-            } else { alert("Gagal unduh file."); }
+            } else { alert("Gagal mengunduh berkas."); }
         }
 
-        // --- ADMIN MENU ---
         function openAdminModal() { document.getElementById('admin-modal').classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function closeModal(id) { 
+            document.getElementById(id).classList.add('hidden'); 
+            if(id === 'folder-modal') { mainFolderId = ""; mainFolderName = ""; }
+        }
         
         async function simpanBrankasBaru() {
             let data = {
@@ -441,30 +466,19 @@ document.getElementById('file-input-id').value = '';       // Ganti dengan ID in
             location.reload();
         }
 
-        // PWA INIT
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
-
         function changeView(type) {
             let grid = document.getElementById('menu-grid');
-            
-            // 1. Bersihkan kelas tampilan lama
             grid.classList.remove('view-grid', 'view-large', 'view-list');
-            
-            // 2. Pasang kelas tampilan baru
             grid.classList.add('view-' + type);
-            
-            // 3. Ubah status tombol aktif/menyala
             document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-view-' + type).classList.add('active');
-            
-            // 4. Cerdas: Simpan pilihan user ke memori HP agar tidak berubah saat di-refresh
+            let activeBtn = document.getElementById('btn-view-' + type);
+            if(activeBtn) activeBtn.classList.add('active');
             localStorage.setItem('brankas_view_pref', type);
         }
 
-        // Jalankan pengecekan preferensi otomatis saat sukses login
-        // Sembari merender menu, panggil baris ini di akhir fungsi login Anda:
         const savedView = localStorage.getItem('brankas_view_pref') || 'grid';
         changeView(savedView);
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
     </script>
 </body>
 </html>
